@@ -1,0 +1,82 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<head>
+	<title>FKD Webapp</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+</head>
+
+<body>
+<header id="header">
+    <h1><strong><a onclick="HideBuffer()" href="{% url 'home'%}">FKD News Webapp</a></strong><i>&mdash; "we are not a f**ing god's.."</i></h1>
+    <nav id="nav">
+        <ul>
+            <li><a href="{% url 'home'%}">{{user.username}}</a></li>
+        </ul>
+    </nav>
+</header>
+</body>    
+
+<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+<a href="#navPanel" class="navPanelToggle"></a>
+<section id="main" class="wrapper">
+    <div class="container">
+        <header class="major special">
+            <h2>Validate Article</h2>
+			<p>Enter the URL to the article</p>
+        </header>
+        <section>
+            <h3>Enter URL</h3>
+            <form method="post" action="#">
+                <div class="row uniform 50%">
+                    <div class="6u 12u$(xsmall)">
+                        {% csrf_token %}
+                        {{form.non_field_errors}}
+                        {{ form.corpus_url.errors }}
+                        {{form.corpus_url}}
+                    </div>
+                    <div class="12u$">
+                        <ul class="actions">
+                            <li><input type="submit" value="Validate News" class="special" onclick="ShowBuffer()"/></li>
+                        </ul>
+                    </div>
+				</div>
+            </form>
+        </section>
+        <section>
+                <p><span class="image left"><img src="{% static 'images/fake_news.jpg' %}" alt="" /></span>This 
+                application works with the help of deep learning and natural language processesing. A neural network 
+                model is pre trained on a dataset of 7000+ news articles which is labeled either as reliable or non-reliable
+                <i>(Note:It does not assert a 100% accuracy, only reliability).</i> Now for every url entered by the user
+                the web app will call a parser which will extract the article text and santitize it for proper input. Keywords 
+                are extracted from the article corpus and then a web scrapper will scrape the internet for simial news with similar 
+                tags, and extracts the text and feed it to a presisted neural network, which will give the bias from all the post.
+                Collective bias of all the articles will give the final result whether the article at the given site is reliable or not.
+                </p>
+        </section>
+</section>
+<img src="{% static 'images/loading.gif'%}" align="center" id="loading-indicator" style="display:none"/>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/skel.min.js' %}"></script>
+<script src="{% static 'js/util.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
+{% if debug %}
+<script>
+    function ShowBuffer() {
+        $('#loading-indicator').show(); 
+        $("section").hide();  
+    }
+
+    function HideBuffer() {
+        $('#loading-indicator').hide(); 
+        $("section").show();  
+    }
+</script>    
+{% endif %}
+    
+{% endblock %}
