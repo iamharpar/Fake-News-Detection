@@ -3,6 +3,30 @@
 
 {% block content %}
 
+<img src="{% static 'images/loading.gif'%}" align="center" id="loading-indicator" style="display:none"/>
+<script  src="{% static 'js/jquery.min.js' %}"></script>
+<script type="javascript" src="{% static 'js/skel.min.js' %}"></script>
+<script type="javascript" src="{% static 'js/util.js' %}"></script>
+<script type="javascript" src="{% static 'js/main.js' %}"></script>   
+
+{% if buffer %}
+<script>
+    function HideBuffer() {
+        $('#loading-indicator').hide(); 
+        $("section").show();  
+    }
+</script>
+{% endif %}
+
+<script>
+    function ShowBuffer() {
+        $('#loading-indicator').show(); 
+        $("section").hide();
+    }
+    
+</script>    
+    
+
 <head>
 	<title>FKD Webapp</title>
 	<meta charset="utf-8" />
@@ -24,6 +48,14 @@
 <a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
 <a href="#navPanel" class="navPanelToggle"></a>
 <section id="main" class="wrapper">
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{ message }}
+        </div>
+    {% endfor %}
     <div class="container">
         <header class="major special">
             <h2>Validate Article</h2>
@@ -58,25 +90,5 @@
                 Collective bias of all the articles will give the final result whether the article at the given site is reliable or not.
                 </p>
         </section>
-</section>
-<img src="{% static 'images/loading.gif'%}" align="center" id="loading-indicator" style="display:none"/>
-<script src="{% static 'js/jquery.min.js' %}"></script>
-<script src="{% static 'js/skel.min.js' %}"></script>
-<script src="{% static 'js/util.js' %}"></script>
-<script src="{% static 'js/main.js' %}"></script>
-
-{% if debug %}
-<script>
-    function ShowBuffer() {
-        $('#loading-indicator').show(); 
-        $("section").hide();  
-    }
-
-    function HideBuffer() {
-        $('#loading-indicator').hide(); 
-        $("section").show();  
-    }
-</script>    
-{% endif %}
-    
+</section> 
 {% endblock %}
