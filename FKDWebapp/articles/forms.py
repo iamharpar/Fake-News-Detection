@@ -4,6 +4,7 @@ from .models import Article
 
 class ArticleForm(forms.ModelForm):
     corpus_url = forms.URLInput()
+    
     class Meta:
         model = Article
         fields = ('corpus_url',)

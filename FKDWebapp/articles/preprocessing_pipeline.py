@@ -59,7 +59,7 @@ class Preprocess(object):
                         remove_nonASCII,to_lower,remove_stopWords,
                         remove_longWords,lemmatize_text]:
 
-                        self.df['title'] = self.df['summary'].apply(func)
+                        self.df['title'] = self.df['title'].apply(func)
                         self.df['body'] = self.df['body'].apply(func)
                         self.df['summary'] = self.df['summary'].apply(func)
                 

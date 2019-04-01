@@ -9,17 +9,10 @@ import utils
 MODEL_NAME = "LSTM_CNN"
 FOLDER_NAME = "training"
 
-<<<<<<< HEAD
 TRAINING_IMG = utils.getFilePath(
     foldername=[FOLDER_NAME,MODEL_NAME],
     create=True
 )
-=======
-MODEL_NAME = "default"
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TRAINING_IMG = os.path.join(BASE_DIR,'training')
-TRAINING_IMG = os.path.join(TRAINING_IMG,MODEL_NAME)
->>>>>>> bf2b4ef115818a186ebc39a0b859ee08b2b49175
 
 class TrainingPlot(keras.callbacks.Callback):
 
@@ -55,15 +48,7 @@ class TrainingPlot(keras.callbacks.Callback):
             plt.xlabel("Epoch #")
             plt.ylabel("Loss/Accuracy")
             plt.legend()
-<<<<<<< HEAD
            
             plt.savefig(utils.getFilePath(TRAINING_IMG,'Epoch-{}.png'\
                 .format(epoch)))
             plt.close()
-=======
-            # Make sure there exists a folder called output in the current directory
-            # or replace 'output' with whatever direcory you want to put in the plots
-            plt.savefig(os.path.join(TRAINING_IMG,'Epoch-{}.png'\
-                    .format(epoch)))
-            plt.close()
->>>>>>> bf2b4ef115818a186ebc39a0b859ee08b2b49175

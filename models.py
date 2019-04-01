@@ -1,3 +1,4 @@
+'''
 from keras.models import Sequential
 from keras.layers import Dense,Dropout,Activation,Flatten,Conv1D,Input,Embedding,MaxPooling1D,LSTM
 from keras.wrappers.scikit_learn import KerasClassifier
@@ -7,7 +8,6 @@ from keras.layers import GlobalAveragePooling1D, Embedding
 from keras.models import Model
 
 import tensorflow as tf
-
 tf.logging.set_verbosity(tf.logging.ERROR)
 import preprocessing as pre
 
@@ -15,9 +15,16 @@ import visual
 import time
 import utils
 import dirs
+'''
+import pandas as pd
+import pickle as pk
+from sklearn import svm
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+from sklearn.linear_model import PassiveAggressiveClassifier
 
-plot_losses = visual.TrainingPlot()
-start_time = time.time()
+#plot_losses = visual.TrainingPlot()
+#start_time = time.time()
 
 '''
 TODO :Generate appropriate dataset files
@@ -121,14 +128,14 @@ def train_model(getSantizeStanceData):
 if __name__ == "__main__":
     #supply this to generate all the required dataset files
     #embedding type specifies the vector formation whether tokenizer or tf_idf
-    pipline = pre.StanceDataPipeline(embedding_type='tokenizer')
+    # pipline = pre.StanceDataPipeline(embedding_type='tokenizer')
     #specify the name of of the pickle file 
-    pipline.startPipeline(pickled_filename="word2vec_filename.pkl")
-    
+    #pipline.startPipeline(pickled_filename="word2vec_filename.pkl")
+    '''
     getStanceData = pre.GetStanceData(
         path_to_vec_pkl=utils.getFilePath(['pickled','word2vec'],filename='word2vec_filename.pkl'),
         embedding_type='tokenizer'
     )
     getStanceData.getTrainTestData(shuffle=True)
-    train_model(getSantizeStanceData=getStanceData)
-    
+    #train_model(getSantizeStanceData=getStanceData)
+    '''
