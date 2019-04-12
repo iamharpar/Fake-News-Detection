@@ -9,19 +9,21 @@
 <script type="javascript" src="{% static 'js/util.js' %}"></script>
 <script type="javascript" src="{% static 'js/main.js' %}"></script>   
 
-{% if buffer %}
-<script>
-    function HideBuffer() {
-        $('#loading-indicator').hide(); 
-        $("section").show();  
-    }
-</script>
-{% endif %}
-
 <script>
     function ShowBuffer() {
         $('#loading-indicator').show(); 
         $("section").hide();
+
+        var timeleft = 10;
+
+        var downloadTimer = setInterval(function(){
+        timeleft--;
+        if(timeleft == 0){
+            console.log(timeleft);
+            $('#loading-indicator').hide(); 
+            $("section").show();  
+            }
+        },1000);
     }
     
 </script>    
@@ -36,7 +38,7 @@
 
 <body>
 <header id="header">
-    <h1><strong><a onclick="HideBuffer()" href="{% url 'home'%}">FKD News Webapp</a></strong><i>&mdash; "we are not a god's.."</i></h1>
+    <h1><strong><a onclick="HideBuffer()" href="{% url 'home'%}">FKD News Webapp</a></strong><i>&mdash; "Fake news Detection using NLP"</i></h1>
     <nav id="nav">
         <ul>
             <li><a href="{% url 'home'%}">{{user.username}}</a></li>

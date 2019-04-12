@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from django.views import View
 from django.views.generic import ListView
 from django.contrib import messages
@@ -30,40 +30,44 @@ class ArticleView(View):
 
     def post(self,request):
         form = self.form_class(request.POST)
+        responseMsg = ""
 
         if form.is_valid():            
             corpus_url = form.cleaned_data['corpus_url']
             articleResponse = ScrapeArticleURL(corpus_url)
 
-            print("[+] %s successfully fetched " % (corpus_url))
-
             current_article = Article.objects.filter(corpus_url=corpus_url)
             
             if current_article:
+                responseMsg = "*" * 5 + "[Cached Result]" + "*" * 5 + "\n"
                 current_article = Article.objects.get(corpus_url=corpus_url)
                 articleKeywords = ArticleKeywords.objects.filter(article=current_article)\
                     .values_list('keywords',flat=True)
                 
-                print("[==> Fetched Keywords : ]",articleKeywords)
+                #print("[==> Fetched Keywords : ]",articleKeywords)
+                tokenGen = "[==> Fetched Keywords : ] {}\n".format(articleKeywords)
+                responseMsg += tokenGen
 
                 fetched_urls = ScrapeArticle.objects.filter(article=current_article)\
                     .values_list('scrape_url',flat=True)    
 
                 for u in fetched_urls:
-                    print("[+] Articles fetched from %s " % (u))
-                time.sleep(2)         
+                    currentFetch = "[+] Articles fetched from {}\n".format(u)
+                    responseMsg += currentFetch
+                    #print("[+] Articles fetched from %s " % (u))
+
+                time.sleep(5)
+                stanceResult = "\nGeneral trend {} with the article with the probability of {} percent".format(current_article.model_stance,current_article.model_prob)         
+                responseMsg += stanceResult
                 messages.success(request,"General trend  %s with the \
                         article with the probability of %s percent" %(
                     current_article.model_stance,
                     current_article.model_prob,
                 ))
 
-                return render(
-                    request,
-                    "dashboard.html",{
-                        "form":ArticleForm,
-                        "buffer":True
-                    })
+                response = HttpResponse(responseMsg,content_type="text/csv  ; charset=utf8")
+                response['Content-Disposition'] = 'attachment; filename={}.csv'.format(current_article.corpus_title.replace(" ","-"))
+                return response
 
             current_article = Article.objects.create(
                 corpus_url=corpus_url,corpus_title=articleResponse['title'],
@@ -73,8 +77,9 @@ class ArticleView(View):
                 ArticleKeywords(article=current_article,keywords=w) for w in articleResponse['keywords']
             ])
 
-            print("[==> Fetched Keywords : ]",articleResponse['keywords'])
-            df_scrape_article = ArticlesFromKeywords(corpus_url,articleResponse['keywords'])
+            responseMsg += "[==> Fetched Keywords :{} ]\n".format(articleResponse['keywords'])
+            
+            df_scrape_article,urlResponse = ArticlesFromKeywords(corpus_url,articleResponse['keywords'])
             
             if df_scrape_article is None:
                 messages.error(request,"Unable to get any labels for the url")
@@ -84,6 +89,8 @@ class ArticleView(View):
                         "form":ArticleForm,
                         "buffer":True
                     })
+
+            responseMsg += urlResponse
 
             prepocess = Preprocess(df=df_scrape_article)
             prepocess.preprocess()
@@ -113,11 +120,9 @@ class ArticleView(View):
             current_article.model_prob = predictions[1] * 100
 
             current_article.save()
+            responseMsg += "\nGeneral trend {} with the article with the probability of {} percent".format(predictions[0],predictions[1]*100)
             messages.success(request,"General trend  %s with the article with the probability of %d percent" % (predictions[0],predictions[1]*100))
 
-        return render(
-            request,
-            "dashboard.html",{
-                "form":ArticleForm,
-                "buffer":True
-        })
+            response = HttpResponse(responseMsg,content_type="text/csv  ; charset=utf8")
+            response['Content-Disposition'] = 'attachment; filename={}.csv'.format(current_article.corpus_title.replace(" ","-"))
+            return response

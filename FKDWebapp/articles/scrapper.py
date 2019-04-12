@@ -51,6 +51,7 @@ def ArticlesFromKeywords(user_url,ls_Keywords):
         article_title = []
         article_text = []
         article_summary = []
+        urlResponse = ""
         for url in urls:
                 try:
                     article = Article(url,language="en")
@@ -60,11 +61,12 @@ def ArticlesFromKeywords(user_url,ls_Keywords):
                     article_title.append(article.title)
                     article_text.append(article.text)
                     article_summary.append(article.summary)
-                    print("[+] URL fetched: {}".format(url))
+                    urlResponse += "[+] URL fetched: {}\n".format(url)
                 except:
-                    print("[+] URL not fetched: {}".format(url))
+                    urlResponse += "[+] URL not fetched: {}\n".format(url)
+
         article_info = [article_title,article_text,article_summary]
         df = pd.DataFrame(article_info)
         df = df.transpose()
         df.columns = ["title","body","summary"]
-        return df
+        return [df,urlResponse]
