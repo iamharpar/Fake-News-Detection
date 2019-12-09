@@ -1,6 +1,6 @@
 {
-    "python.pythonPath": "C:\\Users\\Shubham\\Desktop\\env\\FKVS\\Scripts\\python.exe",
-    "python.linting.pep8Enabled": false,
+    "python.pythonPath": "env/bin/python",
+    "python.linting.pycodestyleEnabled": false,
     "python.linting.enabled": false,
     "python.linting.pylintEnabled": true
 }

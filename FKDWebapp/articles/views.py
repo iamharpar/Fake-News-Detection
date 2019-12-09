@@ -35,7 +35,7 @@ class ArticleView(View):
         if form.is_valid():            
             corpus_url = form.cleaned_data['corpus_url']
             articleResponse = ScrapeArticleURL(corpus_url)
-
+            print(articleResponse['keywords'])
             current_article = Article.objects.filter(corpus_url=corpus_url)
             
             if current_article:

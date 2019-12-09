@@ -8,6 +8,9 @@ import pandas as pd
 import urllib3
 
 def ScrapeArticleURL(url):
+    """
+    Segments a given article into a dictionary using url
+    """
     article = Article(url,language="en")
     article.download()
     article.parse()
@@ -69,4 +72,5 @@ def ArticlesFromKeywords(user_url,ls_Keywords):
         df = pd.DataFrame(article_info)
         df = df.transpose()
         df.columns = ["title","body","summary"]
+        print("urlResponse:",urlResponse)
         return [df,urlResponse]

@@ -11,7 +11,7 @@ class GNews(object):
 
         def search(self, keys):
                 for single_key in keys:
-                    self.key = self.key+single_key+"+"
+                    self.key = self.key + single_key + "+"
                     self.key = self.key.replace(" ","+")
                 self.getpage()
 
@@ -25,9 +25,9 @@ class GNews(object):
                 
                 self.content = soup(self.page, "html.parser")
                 try:
-                        result = self.content.find(id="ires").find_all("div", class_="g")
+                        result = self.content.find(id="rso").find_all("div", class_="g")
                 except:
-                       return None
+                        return None
 
                 for item in result:
                         try:
