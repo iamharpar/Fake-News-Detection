@@ -41,7 +41,7 @@ def ArticlesFromKeywords(user_url,ls_Keywords):
         gnews_response = gnews_object.getpage()
 
         if gnews_response is None:
-            return None
+            return None, None
 
         urls = gnews_object.getlink()
 

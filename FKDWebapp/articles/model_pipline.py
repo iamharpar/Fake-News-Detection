@@ -1,5 +1,6 @@
 from sklearn.neighbors import KNeighborsClassifier
 import pickle
+from math import sqrt
 
 CLASSIFIER = "articles/pickled/PassiveAggressive_model.sav"
 TF_IDF = "articles/pickled/tfidf_fit.pkl"
@@ -35,7 +36,7 @@ class ModelPipeline(object):
     
     def predict(self):
         predictions = self.classifier.predict(self.scrape_article_body_tfidf)
-        knn = KNeighborsClassifier(n_neighbors=4)
+        knn = KNeighborsClassifier(n_neighbors=int(sqrt(len(predictions))))
         knn.fit(self.scrape_article_body_tfidf,predictions)
         parms = SW[knn.predict(self.claim_article_body_tfidf)[0]]
         prob = knn.predict_proba(self.claim_article_body_tfidf)[0][0]

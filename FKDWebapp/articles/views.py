@@ -121,6 +121,7 @@ class ArticleView(View):
 
             current_article.save()
             responseMsg += "\nGeneral trend {} with the article with the probability of {} percent".format(predictions[0],predictions[1]*100)
+            print("[=] Probability of {}%".format(predictions[1]*100))
             messages.success(request,"General trend  %s with the article with the probability of %d percent" % (predictions[0],predictions[1]*100))
 
             response = HttpResponse(responseMsg,content_type="text/csv  ; charset=utf8")
