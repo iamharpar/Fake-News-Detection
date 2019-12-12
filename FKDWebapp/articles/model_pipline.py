@@ -36,7 +36,7 @@ class ModelPipeline(object):
     
     def predict(self):
         predictions = self.classifier.predict(self.scrape_article_body_tfidf)
-        knn = KNeighborsClassifier(n_neighbors=int(sqrt(len(predictions))))
+        knn = KNeighborsClassifier(n_neighbors=int(len(predictions)))
         knn.fit(self.scrape_article_body_tfidf,predictions)
         parms = SW[knn.predict(self.claim_article_body_tfidf)[0]]
         prob = knn.predict_proba(self.claim_article_body_tfidf)[0][0]

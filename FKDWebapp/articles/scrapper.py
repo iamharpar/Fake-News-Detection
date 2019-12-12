@@ -55,6 +55,7 @@ def ArticlesFromKeywords(user_url,ls_Keywords):
         article_text = []
         article_summary = []
         urlResponse = ""
+        urls = urls[:7]
         for url in urls:
                 try:
                     article = Article(url,language="en")
@@ -72,5 +73,5 @@ def ArticlesFromKeywords(user_url,ls_Keywords):
         df = pd.DataFrame(article_info)
         df = df.transpose()
         df.columns = ["title","body","summary"]
-        print("urlResponse:",urlResponse)
+        print(urlResponse)
         return [df,urlResponse]
